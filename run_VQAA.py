@@ -12,6 +12,9 @@ from qiskit import QuantumCircuit, ClassicalRegister, QuantumRegister
 from qiskit.circuit.library import QFT, PhaseGate
 from random import uniform
 from qiskit.providers.aer.library import save_statevector
+from qiskit import QuantumCircuit, ClassicalRegister, QuantumRegister, execute
+from qiskit.providers.aer.noise.errors import thermal_relaxation_error, pauli_error
+from qiskit.providers.aer.noise import NoiseModel
 
 # GRAPH = nx.random_graphs.random_regular_graph(DEGREE, AES_KEY_LENGTH)
 
@@ -168,16 +171,51 @@ def generate_circuit_with_state_vector(ansatz_type, if_back_control, plain_text,
     # qc.measure(data_space, classic_reg)
     return qc
 
+def get_thermal_error(num_qubits):
+    t1 = error_list["thermal"][0]
+    t2 = error_list["thermal"][1]
+
+    # nanosecond
+    time_u1 = 50
+    time_x = 10
+    time_h = 10
+    time_cx = 10
+    time_cu1 = 10
+    time_measure = 1000 # 1 microsecond
+    errors_measure = thermal_relaxation_error(t1, t2, time_measure)
+    errors_u1 = thermal_relaxation_error(t1, t2, time_u1)
+    errors_x = thermal_relaxation_error(t1, t2, time_x)
+    errors_h = thermal_relaxation_error(t1, t2, time_h)
+    errors_cx = thermal_relaxation_error(t1, t2, time_cx).expand(
+        thermal_relaxation_error(t1, t2, time_cx))
+    errors_cu1 = thermal_relaxation_error(t1, t2, time_cu1).expand(
+        thermal_relaxation_error(t1, t2, time_cu1))
+
+    noise_model = NoiseModel()
+    noise_model.add_all_qubit_quantum_error(errors_u1, "u1")
+    noise_model.add_all_qubit_quantum_error(errors_x, "x")
+    noise_model.add_all_qubit_quantum_error(errors_h, "h")
+    # noise_model.add_all_qubit_quantum_error(errors_cx, "cx")
+    # noise_model.add_all_qubit_quantum_error(errors_cu1, "cu1")
+    noise_model.add_all_qubit_quantum_error(errors_measure, "measure")
+
+    for i in range(num_qubits - 1):
+        for j in range(i + 1, num_qubits):
+            noise_model.add_quantum_error(errors_cx, "cx", [i, j])
+            noise_model.add_quantum_error(errors_cu1, "cu1", [i, j])
+
+    return noise_model
+
+
+
 def run_one_sim(qc, if_gpu, error_type):
     backend = Aer.get_backend("statevector_simulator")
     if if_gpu:
         backend.set_options(device="GPU")
 
     if error_type == "thermal":
-        # TODO
-        # 这里如果使用thermal应该怎么写
-        #
-        return
+        noise_thermal = get_thermal_error(qc.num_qubits)
+        job = execute(qc, backend=backend, noise_model=noise_thermal, optimization_level=0)
     else:
         tqc = transpile(qc, backend)
         job = backend.run(tqc)
