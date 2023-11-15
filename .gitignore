@@ -1,3 +1,9 @@
 .idea/*
 results/*
 *.ipynb
+*.tmp
+*.7z
+*.zip
+*.png
+*.jpeg
+.DS_Store
