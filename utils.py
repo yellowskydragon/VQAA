@@ -3,7 +3,10 @@ import numpy as np
 import networkx as nx
 import matplotlib.pyplot as plt
 from pathlib import Path
-
+plt.rcParams['font.sans-serif'] = 'Times New Roman'
+plt.rcParams['mathtext.fontset'] = 'stix'
+plt.rcParams['xtick.direction'] = 'in'
+plt.rcParams['ytick.direction'] = 'in'
 pauli_Z = np.array([[1, 0], [0, -1]])
 
 
@@ -96,7 +99,22 @@ def arr2str(vec: np.array):
     return ','.join(str(i) for i in vec)
 
 
+def get_T1_T2():
+    colnames = ["Qubit", "Frequency", "T1", "T2", "ReadoutError", "SQError", "TQError", "Date"]
+    path = Path("ibmq_16_melbourne_calibrations.csv")
+    data = pandas.read_csv(path, names=colnames)
+    '''Returns the thermal relaxation time T1 and the qubit dephasing time T2, as given by IBMQ.'''
+    t1er = data.T1.tolist()
+    del t1er[0]
+    t2er = data.T2.tolist()
+    del t2er[0]
 
+    for i in range(0, len(t1er)):
+        t1er[i] = float(t1er[i] + "e3")
+        t2er[i] = float(t2er[i] + "e3")
+    T1s = np.array(t1er)
+    T2s = np.array(t2er)
+    return [[t1, t2] for t1, t2 in zip(T1s, T2s)]
 
 if __name__ == '__main__':
 

@@ -7,3 +7,6 @@ results/*
 *.png
 *.jpeg
 .DS_Store
+results*/
+__*
+graphs/*
