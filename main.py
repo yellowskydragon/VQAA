@@ -91,5 +91,11 @@ if __name__ == '__main__':
     # from matplotlib.font_manager import fontManager
     # print([f.name for f in fontManager.ttflist])
     # print(plt.rcParams['font.family'])
-    plt.rcParams['font.family'] = 'Times New Roman'
-    draw_prob_and_cost_with_iter()
+    # plt.rcParams['font.family'] = 'Times New Roman'
+    # draw_prob_and_cost_with_iter()
+
+
+    s = '0.008293594421014936+0j'
+    v = complex(s)
+    print(v)
+    print(abs(v))

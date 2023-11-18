@@ -10,3 +10,4 @@ results/*
 results*/
 __*
 graphs/*
+__pycache__/*

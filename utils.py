@@ -2,12 +2,56 @@ import time
 import numpy as np
 import networkx as nx
 import matplotlib.pyplot as plt
+import pandas
 from pathlib import Path
 plt.rcParams['font.sans-serif'] = 'Times New Roman'
 plt.rcParams['mathtext.fontset'] = 'stix'
 plt.rcParams['xtick.direction'] = 'in'
 plt.rcParams['ytick.direction'] = 'in'
 pauli_Z = np.array([[1, 0], [0, -1]])
+
+
+def clean_t1_t2_suc_rate(t1, t2, suc):
+    t1_t2_suc_tri = []
+    for i in range(len(t1)):
+        t1_t2_suc_tri.append([t1[i], t2[i], suc[i]])
+    t1_t2_suc_tri.sort(key=lambda x: x[0], reverse=False)
+    t1_t2_suc_tri.sort(key=lambda x: x[1], reverse=False)
+
+    for temp_t2 in range(10, 200, 20):
+        for temp_t1 in range(10, 200, 10):
+            for exist_t1_t2 in t1_t2_suc_tri:
+                if abs(temp_t1 - exist_t1_t2[0]) <= 1 and abs(temp_t2 - exist_t1_t2[1]) <= 1:
+                    if_have = 1
+                    break
+                    continue
+                else:
+                    if_have = 0
+            if not if_have:
+                t1_t2_suc_tri.append([temp_t1, temp_t2, -1])
+    t1_t2_suc_tri.sort(key=lambda x: x[0], reverse=False)
+    t1_t2_suc_tri.sort(key=lambda x: x[1], reverse=False)
+
+    del t1_t2_suc_tri[-10:]
+    # for i_ in t1_t2_suc_tri:
+    #     print(i_)
+
+    suc_rate_2d = []
+    temp_l = []
+    for i in range(len(t1_t2_suc_tri)):
+        if  i % 19 != 18:
+            temp_l.append(t1_t2_suc_tri[i][2])
+        else:
+            temp_l.append(t1_t2_suc_tri[i][2])
+            suc_rate_2d.append(temp_l)
+            temp_l = []
+
+    # for one_row in suc_rate_2d:
+    #     print(one_row)
+
+    return t1_t2_suc_tri, suc_rate_2d
+
+
 
 
 def create_graph():
