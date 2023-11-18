@@ -35,7 +35,7 @@ def run_thermal_error():
     plaintext = "10110010"
     ciphertext = "10000111"
     max_iter = 50
-    repeat = "0, 1"
+    repeat = "0, 5"
     end_prob = 0.5
     for t1_t2 in get_T1_T2():
         error_list["thermal"] = [t1_t2[0], t1_t2[1]]
