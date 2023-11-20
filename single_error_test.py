@@ -3,13 +3,13 @@ from run_VQAA import *
 from pathlib import Path
 from time import time
 
-if __name__ == '__main__':
+def one_thread_vqaa(args):
     debug_mode = 1
     if debug_mode:
-        error_type = "2qb"
+        error_type = "1qb"
         begin = 0.00
         step = 0.001
-        max_ = 0.02
+        max_ = 0.0005
         gpu = 0
         ansatz_type = "rx"
         opti_method = "gd"
@@ -18,10 +18,9 @@ if __name__ == '__main__':
         plaintext = "10110010"
         ciphertext = "10000111"
         max_iter = 50
-        repeat = "0, 10"
-        end_prob = 0.5
+        # repeat = [a, b]
+        end_prob = 0.9
     else:
-
         error_type = input("Input Error type : ")
         begin = float(input("Input begin : "))
         step = float(input("Input step : "))
@@ -35,8 +34,6 @@ if __name__ == '__main__':
         ciphertext = input("Input ciphertext (0 as default) : ")
         max_iter = input("Max interation : ")
         repeat = input("repeated : ")
-
-
     if "1" in error_type:
         error_list["2qb"] = -1
         error_list["spam"] = -1
@@ -56,7 +53,7 @@ if __name__ == '__main__':
     while error_list[error_type] <= MAX_ERROR_RATE:
 
         ## 对于每一个噪声大小，重复repeated次
-        for i in range(int(repeat.split(',')[0]), int(repeat.split(',')[1])):
+        for i in range(args[0], args[1]):
 
             error_level = str(error_list[error_type])
             # 这里需要重新写thermal error 的情况
@@ -73,5 +70,8 @@ if __name__ == '__main__':
             else:
                 continue
         error_list[error_type] += STEP
+
+if __name__ == '__main__':
+    one_thread_vqaa()
 
 

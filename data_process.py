@@ -37,6 +37,7 @@ noise_level = [0.001, 0.002, 0.003, 0.004, 0.005, 0.006, 0.007, 0.008, 0.0090000
 begin = 0.001
 step = 0.001
 max_ = 0.02
+step = 0.5
 
 gpu = 0
 ansatz_type = "rx"
@@ -232,7 +233,7 @@ def simulation_result_process(error_type):
     if "1" in error_type:
         error_list["2qb"] = -1
         error_list["spam"] = -1
-        error_list["1qb"] = begin
+        error_list["1qb"] = 0.0
     elif "2" in error_type:
         error_list["1qb"] = -1
         error_list["spam"] = -1
@@ -376,4 +377,5 @@ if __name__ == '__main__':
     # draw_subplots("spam")
 
     # draw_iter_num_with_thermal(iter_nums, 1)
-    draw_subplots("thermal")
+    # draw_subplots("1qb")
+    simulation_result_process("1qb")

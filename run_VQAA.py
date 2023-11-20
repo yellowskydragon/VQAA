@@ -435,14 +435,14 @@ def gd(graph, ansatz, if_back, plain, cipher, if_GPU, error_type, expectation, t
     Gd = [0] * length
     for i in range(length):
         x = [t for t in x0]
-        x[i] += 0.01
+        x[i] += 0.1
         qc = generate_circuit_with_state_vector(ansatz_type=ansatz, if_back_control=if_back,
                                                 plain_text=plain, theta_list=x)
         state_vector = run_one_sim(qc=qc, if_gpu=if_GPU, error_type=error_type)
         cost_ = cal_expect_of_ham(g=graph, state_vector=state_vector, cipher=cipher)
         print(f"changing the {i}th of parameter of theta list and new cost is {cost_}")
         times += 1
-        Gd[i] = (cost_ - cost) / 0.01
+        Gd[i] = (cost_ - cost) / 0.1
     r0 = random.uniform(0, 1)
     print(f"current gradient is : {Gd}")
 
