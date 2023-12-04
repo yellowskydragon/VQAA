@@ -10,9 +10,10 @@ if __name__ == '__main__':
     error_type = "1qb"
     num_core = 10
 
+    r_begin = 0
+    r_end = 200
 
-
-    repeat_list = list(range(0, 500, 1))
+    repeat_list = list(range(r_begin, r_end, 1))
     total_times = len(repeat_list)
 
     step = int(total_times / num_core)
@@ -22,7 +23,7 @@ if __name__ == '__main__':
     print(para_list)
 
     #
-    # with Pool(num_core) as p:
-    #     p.map(one_thread_vqaa, para_list)
+    with Pool(num_core) as p:
+        p.map(one_thread_vqaa, para_list)
 
 
