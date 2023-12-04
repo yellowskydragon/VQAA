@@ -6,7 +6,7 @@ from time import time
 def one_thread_vqaa(args):
     debug_mode = 1
     if debug_mode:
-        error_type = "1qb"
+        error_type = args[2]
         begin = 0.00
         step = 0.001
         max_ = 0.0005

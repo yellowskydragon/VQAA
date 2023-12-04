@@ -264,7 +264,7 @@ def simulation_result_process(error_type):
             if iter_num == 51:
                 repeat_times -= 1
                 continue
-            iter_file_nums += iter_num - 1
+            iter_file_nums += iter_num
 
         avg_iter_file_nums = round(iter_file_nums / repeat_times, 4)
         avg_iter_file_nums_list.append(avg_iter_file_nums)

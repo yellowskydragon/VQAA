@@ -95,7 +95,36 @@ if __name__ == '__main__':
     # draw_prob_and_cost_with_iter()
 
 
-    s = '0.008293594421014936+0j'
-    v = complex(s)
-    print(v)
-    print(abs(v))
+
+    G = nx.Graph()
+    G.add_node(range(0,8))
+    G.add_edge(0, 1)
+    G.add_edge(0, 6)
+    G.add_edge(0, 7)
+    G.add_edge(1, 7)
+    G.add_edge(1, 3)
+    G.add_edge(2, 4)
+    G.add_edge(2, 5)
+    G.add_edge(2, 7)
+    G.add_edge(3, 4)
+    G.add_edge(3, 6)
+    G.add_edge(4, 5)
+    G.add_edge(5, 6)
+
+
+    pos = nx.circular_layout(G)
+    options = {
+        "with_labels": True,
+        "font_size": 20,
+        "font_weight": "bold",
+        "font_color": "white",
+        "node_size": 2000,
+        "width": 2
+    }
+    nx.draw_networkx(G, pos, **options)
+    ax = plt.gca()
+    ax.margins(0.20)
+    plt.axis("off")
+
+
+    plt.show()
